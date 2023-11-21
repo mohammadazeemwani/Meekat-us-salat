@@ -1,0 +1,194 @@
+* {
+    font-family: Amiri;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    box-sizing: border-box;
+    /* width: 100%; */
+
+}
+
+:root {
+    --text-color: #3C2A28;
+}
+
+body {
+    position: relative;
+    background-image: url("Mask\ group.jpg");
+    background-size: cover;
+}
+
+.container {
+    margin: 25px auto 25px auto;
+    max-width: 510px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    background: #FFF3DE;
+    padding:0 20px 20px 20px;
+    box-shadow: 9px 13px 10px -2px rgba(0, 0, 0, 0.25);
+}
+
+.rows {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.amiri_text {
+    flex-basis: 165px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    min-width: 130px;
+
+}
+
+h1 {
+    color: var(--text-color);
+    font-size: 64px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.ayah {
+    text-align: center;
+    font-size: 33px;
+    font-family: Harmattan;
+    letter-spacing: 0.6px;
+    margin: -12px 0 10px 0;
+    line-height: 148%;
+    text-align: center;
+}
+
+.time {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 26px;
+    letter-spacing: 1.8px;
+    padding-top: 9px;
+}
+
+.date {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 150%;
+
+}
+
+.footer {
+    width: 100%;
+    height: 196.5px;
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: -25px;
+    z-index: -1000;
+}
+
+.creator {
+    width: 324px;
+    background-image: url("Group\ 3.svg");
+    background-size: cover;
+    position: relative;
+}
+
+.creator>a {
+    font-family: 'IBM Plex Mono', monospace;
+    text-decoration: none;
+    font-size: 25px;
+    position: absolute;
+    left: 29px;
+    top: 73px;
+    width: fit-content;
+    color: #2B3499;
+}
+
+.place-name{
+    overflow: hidden;
+}
+
+.place-name, span{
+    margin: -20px 0px 24px 0px;
+    background-color: #3C2A28;
+    color: #FFF3DE;
+    padding: 18px 14px 1px 14px;
+    font-size: 18px;
+    line-height: 130%;
+    font-family: 'Gulzar';
+    border-radius: 4px;
+}
+
+span{
+    padding: 18px 0px 1px 0px;
+    display: inline;
+}
+
+
+.different-places{
+    margin: 0px auto 25px auto;
+    max-width: 510px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: 10px;
+}
+
+.different-places form{
+    display: flex;
+    flex-basis: 140px;
+    flex-grow: 1;
+}
+
+.different-places button{
+    /* min-width: 150px; */
+    outline: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    /* order of prop is imp. and it matters */
+
+    width: 100%;
+    border-radius: 5px;
+    background: #FFF3DE;
+    box-shadow: 9px 13px 10px -2px rgba(0, 0, 0, 0.25);
+    margin: 0px 0px 6px 0px;
+    line-height: 36px;
+    font-family: 'Roboto Mono';
+    font-weight: 500;
+    text-align: end;
+    padding: 0px 0px 0 14px;
+    font-size: 17px;
+}
+
+
+
+
+@media only screen and (max-width: 534px) {
+    .container {
+        margin-top: 0;
+        border-radius: 0 0 15px 15px;
+    }
+
+    
+
+    .date {
+        font-size: 22px;
+    }
+
+    .ayah {
+        font-size: 25px;
+        letter-spacing: 0;
+
+    }
+
+}
+
+@media only screen and (max-width: 1179px) {
+    .footer {
+        position: static;
+    }
+}
