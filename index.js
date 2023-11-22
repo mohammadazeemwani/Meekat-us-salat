@@ -14,9 +14,9 @@ app.get("/", (req, res) => {
 
 
 
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', };
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: targetTimeZone  };
     var today1 = new Date();
-    var urduDate = today1.toLocaleDateString('ur-PK', options);
+    var urduDate = new Intl.DateTimeFormat('ur-PK', options).format(today1);
     var today2 = new Date();
     var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric', timeZone: targetTimeZone }).format(today2);
 
