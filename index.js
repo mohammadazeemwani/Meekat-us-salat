@@ -15,7 +15,6 @@ app.get("/", (req, res) => {
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     var today = new Date();
     var urduDate = today.toLocaleDateString('ur-PK', options);
-    var today = new Date();
     var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(today);
 
     const date = new Date();
@@ -47,7 +46,6 @@ app.post("/:place", (req, res) => {
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     var today = new Date();
     var urduDate = today.toLocaleDateString('ur-PK', options);
-    var today = new Date();
     var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(today);
 
     const date = new Date();
