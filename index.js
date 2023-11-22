@@ -14,18 +14,16 @@ app.get("/", (req, res) => {
 
 
 
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: targetTimeZone  };
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: targetTimeZone };
     var today1 = new Date();
     var urduDate = new Intl.DateTimeFormat('ur-PK', options).format(today1);
     var today2 = new Date();
     var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric', timeZone: targetTimeZone }).format(today2);
 
-    const date = new Date();
-
-    month_today = (date.getMonth() + 1);
-    day_today = date.getDate();
-
-
+    var month = new Intl.DateTimeFormat('en-IN', { month: 'numeric', timeZone: targetTimeZone }).format(today1);
+    var day = new Intl.DateTimeFormat('en-IN', { day: 'numeric', timeZone: targetTimeZone }).format(today1);
+    month_today = (+month);
+    day_today = +day;
     meekatToday = jsonData[month_today][day_today];
 
     res.render('index', {
@@ -46,19 +44,19 @@ app.get("/", (req, res) => {
 
 app.post("/:place", (req, res) => {
 
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    var today = new Date();
-    var urduDate = today.toLocaleDateString('ur-PK', options);
-    var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(today);
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: targetTimeZone };
+    var today1 = new Date();
+    var urduDate = new Intl.DateTimeFormat('ur-PK', options).format(today1);
+    var today2 = new Date();
+    var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric', timeZone: targetTimeZone }).format(today2);
 
-    const date = new Date();
-    month_today = (date.getMonth() + 1);
-    day_today = date.getDate();
+    var month = new Intl.DateTimeFormat('en-IN', { month: 'numeric', timeZone: targetTimeZone }).format(today1);
+    var day = new Intl.DateTimeFormat('en-IN', { day: 'numeric', timeZone: targetTimeZone }).format(today1);
+    month_today = (+month );
+    day_today = +day;
     meekatToday = jsonData[month_today][day_today];
 
     const location = req.params.place;
-
-
 
 
     fajrStart = meekatToday.fajrStart;
@@ -67,11 +65,13 @@ app.post("/:place", (req, res) => {
     fajrTime.setHours(parseInt(fajrhours, 10));
     fajrTime.setMinutes(parseInt(fajrminutes, 10));
 
+
     zuhrStart = meekatToday.zuhrStart;
     let [zuhrhours, zuhrminutes] = zuhrStart.split(':');
     let zuhrTime = new Date();
     zuhrTime.setHours(parseInt(zuhrhours, 10));
     zuhrTime.setMinutes(parseInt(zuhrminutes, 10));
+
 
     asrStart = meekatToday.asrStart;
     let [asrhours, asrminutes] = asrStart.split(':');
@@ -79,11 +79,13 @@ app.post("/:place", (req, res) => {
     asrTime.setHours(parseInt(asrhours, 10));
     asrTime.setMinutes(parseInt(asrminutes, 10));
 
+
     magribStart = meekatToday.magribStart;
     let [magribhours, magribminutes] = magribStart.split(':');
     let magribTime = new Date();
     magribTime.setHours(parseInt(magribhours, 10));
     magribTime.setMinutes(parseInt(magribminutes, 10));
+
 
     ishaStart = meekatToday.ishaStart;
     let [ishahours, ishaminutes] = ishaStart.split(':');
@@ -91,18 +93,19 @@ app.post("/:place", (req, res) => {
     ishaTime.setHours(parseInt(ishahours, 10));
     ishaTime.setMinutes(parseInt(ishaminutes, 10));
 
+
     tuluAftab = meekatToday.tuluAftab;
     let [tuluhours, tuluminutes] = tuluAftab.split(':');
     let tuluTime = new Date();
     tuluTime.setHours(parseInt(tuluhours, 10));
     tuluTime.setMinutes(parseInt(tuluminutes, 10));
 
+
     nisfNahar = meekatToday.nisfNahar;
     let [nisfhours, nisfminutes] = nisfNahar.split(':');
     let nisfTime = new Date();
     nisfTime.setHours(parseInt(nisfhours, 10));
     nisfTime.setMinutes(parseInt(nisfminutes, 10));
-
 
 
     switch (location) {
