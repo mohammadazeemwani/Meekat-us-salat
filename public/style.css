@@ -73,7 +73,7 @@ h1 {
 .date {
     font-family: 'Noto Nastaliq Urdu', serif;
     font-weight: 400;
-    font-size: 26px;
+    font-size: 24px;
     line-height: 150%;
 
 }
@@ -176,7 +176,8 @@ span{
     
 
     .date {
-        font-size: 22px;
+        font-size: 19px;
+        line-height: 245%;
     }
 
     .ayah {
