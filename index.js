@@ -7,15 +7,18 @@ const app = express();
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-
+const targetTimeZone = 'Asia/Kolkata'
 
 
 app.get("/", (req, res) => {
 
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    var today = new Date();
-    var urduDate = today.toLocaleDateString('ur-PK', options);
-    var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(today);
+
+
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', };
+    var today1 = new Date();
+    var urduDate = today1.toLocaleDateString('ur-PK', options);
+    var today2 = new Date();
+    var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric', timeZone: targetTimeZone }).format(today2);
 
     const date = new Date();
 
