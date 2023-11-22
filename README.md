@@ -20,4 +20,5 @@ It has meekat updated for undermentioned places:
 - Sopore
 - Punch
 
-- ![website image](https://files.catbox.moe/gctteu.png)
+<a href="https://meekat-us-salat.onrender.com/"><img src="https://files.catbox.moe/gctteu.png" alt="Preview  of Meekat-us-salat for Jammu and Kashmir"></a>
+
