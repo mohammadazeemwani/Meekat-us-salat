@@ -20,4 +20,4 @@ It has meekat updated for undermentioned places:
 - Sopore
 - Punch
 
-- [](https://files.catbox.moe/gctteu.png)
+- ![website image](https://files.catbox.moe/gctteu.png)
