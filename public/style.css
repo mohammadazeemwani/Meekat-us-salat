@@ -178,6 +178,10 @@ span{
     .date {
         font-size: 19px;
         line-height: 245%;
+        /* letter-spacing: -1px; */
+        word-spacing: -1px;
+        font-weight: 600;
+        color: hwb(6deg 15.69% 76.47% / 73%);
     }
 
     .ayah {

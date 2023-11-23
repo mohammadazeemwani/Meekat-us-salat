@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: targetTimeZone };
     var today1 = new Date();
     var urduDate = new Intl.DateTimeFormat('ur-PK', options).format(today1);
+    urduDate = urduDate.replace(/،/g, '');
     var today2 = new Date();
     var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric', timeZone: targetTimeZone }).format(today2);
 
@@ -47,6 +48,7 @@ app.post("/:place", (req, res) => {
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: targetTimeZone };
     var today1 = new Date();
     var urduDate = new Intl.DateTimeFormat('ur-PK', options).format(today1);
+    urduDate = urduDate.replace(/،/g, '');
     var today2 = new Date();
     var islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric', timeZone: targetTimeZone }).format(today2);
 
