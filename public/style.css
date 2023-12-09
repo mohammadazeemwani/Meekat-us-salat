@@ -85,7 +85,7 @@ h1 {
     justify-content: flex-end;
     position: absolute;
     bottom: -25px;
-    z-index: -1000;
+    z-index: 1000;
 }
 
 .creator {
