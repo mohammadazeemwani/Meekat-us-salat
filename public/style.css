@@ -5,6 +5,7 @@
     color: var(--text-color);
     box-sizing: border-box;
     /* width: 100%; */
+    z-index: 300;
 
 }
 
@@ -85,7 +86,7 @@ h1 {
     justify-content: flex-end;
     position: absolute;
     bottom: -25px;
-    z-index: 1000;
+    z-index: -1000;
 }
 
 .creator {
@@ -104,6 +105,7 @@ h1 {
     top: 73px;
     width: fit-content;
     color: #2B3499;
+    z-index: 500;
 }
 
 .place-name{
@@ -136,32 +138,41 @@ span{
     column-gap: 10px;
 }
 
-.different-places form{
+.different-places div{
     display: flex;
     flex-basis: 140px;
     flex-grow: 1;
+    justify-content: flex-end;
+
+    border-radius: 5px;
+    background: #FFF3DE;
+    box-shadow: 9px 13px 10px -2px rgba(0, 0, 0, 0.25);
+    margin: 0px 0px 6px 0px;
 }
 
-.different-places button{
+.different-places a {
+    background-image: url("telegram8.svg");
+    background-size: cover;
+    height: 30px;
+    width: 30px;
+    margin: 4px 6px 4px 4px;
+}
+
+.different-places button {
     /* min-width: 150px; */
     outline: none;
     border: none;
     background: none;
     cursor: pointer;
-
-    /* order of prop is imp. and it matters */
-
     width: 100%;
-    border-radius: 5px;
-    background: #FFF3DE;
-    box-shadow: 9px 13px 10px -2px rgba(0, 0, 0, 0.25);
-    margin: 0px 0px 6px 0px;
-    line-height: 36px;
+    line-height: 24px;
     font-family: 'Roboto Mono';
     font-weight: 500;
     text-align: end;
-    padding: 0px 0px 0 14px;
+    padding: 0px 0px 0 11px;
     font-size: 17px;
+    margin: 7px 0 5px 0px;
+    border-left: 2px dashed #D47E59;
 }
 
 
