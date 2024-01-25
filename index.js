@@ -120,7 +120,7 @@ const salahNotification = function (districtHash, salah) {
         })
 };
 
-salahNotification('hash9', "Zuhr");
+// salahNotification('hash9', "Zuhr");
 
 
 
