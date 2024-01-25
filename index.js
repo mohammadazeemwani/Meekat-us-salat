@@ -1,7 +1,21 @@
 const express = require('express');
 const jsonData = require('./public/allMonthMeekat.json');
 const TelegramBot = require('node-telegram-bot-api');
+const { MongooseConnect, FcmBatch, saveToken} = require('./database')
 require('dotenv').config();
+
+MongooseConnect();
+
+//Initializing admin for fcm (firebase cloud messaging)
+const admin = require("firebase-admin");
+
+const serviceAccount = require("./meekat-us-salat-firebase-adminsdk-88kdx-6d7431fdd2.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+
 
 const token = process.env.TOKEN; // one bot will handle everything
 const bot = new TelegramBot(token, {polling: true});
@@ -34,8 +48,85 @@ const app = express();
 
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
+app.use(express.json());
 
 const targetTimeZone = 'Asia/Kolkata'
+
+
+app.get('/enableNotification', (req, res) => {
+    res.render('enableNotification');
+});
+
+// handle notification token and save it to the database
+app.post('/token_recieve',async (req, res) => {
+
+    console.log(req.body);
+    const result = await saveToken(req.body.district.toLowerCase(), req.body.token);
+    res.json(result);
+});
+
+app.post('/disableNotification',async (req, res) => {
+    await FcmBatch.findOne({ districtHash: req.body.districtHash })
+        .then((consernedDistrict) => {
+            if (consernedDistrict) {
+                
+                const consernedBatch = consernedDistrict.tokens[req.body.indexOfBatch];
+
+                const indexOfFcmInBatch = consernedBatch.indexOf(req.body.fcmToken);
+
+                consernedBatch.splice(indexOfFcmInBatch, 1);
+
+                consernedDistrict.save();
+            }
+        }).then(() => {
+            res.sendStatus(200);
+        })
+
+})
+
+
+
+
+// now send notification when we send telegeram notification
+// creating functions to send notification on fajr zuhr asr magrib and isha with passing in the token from db
+
+
+// use salah as first word capital as it will be in notification directly
+const salahNotification = function (districtHash, salah) {
+    FcmBatch.findOne({ districtHash: districtHash })
+        .then((consernedDistrict) => {
+            // we have to send notification to token array
+            
+            if (consernedDistrict && consernedDistrict.tokens[0].length) {
+                consernedDistrict.tokens.forEach((tokenBatch) => {
+                    const message = {
+                        data: {
+                          title: `${salah} Namaz Started`,
+                          body: "Headover to salah",
+                        },
+                        tokens: tokenBatch
+                      };
+                      admin.messaging().sendEachForMulticast(message)
+                      .then((response) => {
+                        // Handle successful responses
+                        console.log('Multicast messages sent successfully:', response);
+                      })
+                      .catch((error) => {
+                        // Handle errors
+                        console.error('Error sending multicast messages:', error);
+                      });
+                })
+            }
+        })
+};
+
+salahNotification('hash9', "Zuhr");
+
+
+
+
+
+
 
 
 app.get("/", (req, res) => {
@@ -446,22 +537,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash1:
             bot.sendMessage(chatId_hash1, 'شروع فجر'+'  :  '+fajrStart_hash1);
+            salahNotification('hash1', 'Fajr');
             
             break;
         case zuhrStart_hash1:
             bot.sendMessage(chatId_hash1, 'شروع ظهر'+'  :  '+zuhrStart_hash1);
+            salahNotification('hash1', 'Zuhr');
 
             break;
         case asrStart_hash1:
             bot.sendMessage(chatId_hash1, 'شروع عصر'+'  :  '+asrStart_hash1);
+            salahNotification('hash1', 'Asr');
 
             break;
         case magribStart_hash1:
             bot.sendMessage(chatId_hash1, 'شروع مغرب'+'  :  '+magribStart_hash1);
+            salahNotification('hash1', 'Magrib');
 
             break;
         case ishaStart_hash1:
             bot.sendMessage(chatId_hash1, 'شروع عشاء'+'  :  '+ishaStart_hash1);
+            salahNotification('hash1', 'Isha');
 
             break;
     
@@ -480,22 +576,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash2:
             bot.sendMessage(chatId_hash2, 'شروع فجر'+'  :  '+fajrStart_hash2);
+            salahNotification('hash2', 'Fajr');
             
             break;
         case zuhrStart_hash2:
             bot.sendMessage(chatId_hash2, 'شروع ظهر'+'  :  '+zuhrStart_hash2);
+            salahNotification('hash2', 'Zuhr');
 
             break;
         case asrStart_hash2:
             bot.sendMessage(chatId_hash2, 'شروع عصر'+'  :  '+asrStart_hash2);
+            salahNotification('hash2', 'Asr');
 
             break;
         case magribStart_hash2:
             bot.sendMessage(chatId_hash2, 'شروع مغرب'+'  :  '+magribStart_hash2);
+            salahNotification('hash2', 'Magrib');
 
             break;
         case ishaStart_hash2:
             bot.sendMessage(chatId_hash2, 'شروع عشاء'+'  :  '+ishaStart_hash2);
+            salahNotification('hash2', 'Isha');
 
             break;
     
@@ -514,22 +615,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash3:
             bot.sendMessage(chatId_hash3, 'شروع فجر'+'  :  '+fajrStart_hash3);
+            salahNotification('hash3', 'Fajr');
             
             break;
         case zuhrStart_hash3:
             bot.sendMessage(chatId_hash3, 'شروع ظهر'+'  :  '+zuhrStart_hash3);
+            salahNotification('hash3', 'Zuhr');
 
             break;
         case asrStart_hash3:
             bot.sendMessage(chatId_hash3, 'شروع عصر'+'  :  '+asrStart_hash3);
+            salahNotification('hash3', 'Asr');
 
             break;
         case magribStart_hash3:
             bot.sendMessage(chatId_hash3, 'شروع مغرب'+'  :  '+magribStart_hash3);
+            salahNotification('hash3', 'Magrib');
 
             break;
         case ishaStart_hash3:
             bot.sendMessage(chatId_hash3, 'شروع عشاء'+'  :  '+ishaStart_hash3);
+            salahNotification('hash3', 'Isha');
 
             break;
     
@@ -548,22 +654,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash4:
             bot.sendMessage(chatId_hash4, 'شروع فجر'+'  :  '+fajrStart_hash4);
+            salahNotification('hash4', 'Fajr');
             
             break;
         case zuhrStart_hash4:
             bot.sendMessage(chatId_hash4, 'شروع ظهر'+'  :  '+zuhrStart_hash4);
+            salahNotification('hash4', 'Zuhr');
 
             break;
         case asrStart_hash4:
             bot.sendMessage(chatId_hash4, 'شروع عصر'+'  :  '+asrStart_hash4);
+            salahNotification('hash4', 'Asr');
 
             break;
         case magribStart_hash4:
             bot.sendMessage(chatId_hash4, 'شروع مغرب'+'  :  '+magribStart_hash4);
+            salahNotification('hash4', 'Magrib');
 
             break;
         case ishaStart_hash4:
             bot.sendMessage(chatId_hash4, 'شروع عشاء'+'  :  '+ishaStart_hash4);
+            salahNotification('hash4', 'Isha');
 
             break;
     
@@ -582,22 +693,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash5:
             bot.sendMessage(chatId_hash5, 'شروع فجر'+'  :  '+fajrStart_hash5);
+            salahNotification('hash5', 'Fajr');
             
             break;
         case zuhrStart_hash5:
             bot.sendMessage(chatId_hash5, 'شروع ظهر'+'  :  '+zuhrStart_hash5);
+            salahNotification('hash5', 'Zuhr');
 
             break;
         case asrStart_hash5:
             bot.sendMessage(chatId_hash5, 'شروع عصر'+'  :  '+asrStart_hash5);
+            salahNotification('hash5', 'Asr');
 
             break;
         case magribStart_hash5:
             bot.sendMessage(chatId_hash5, 'شروع مغرب'+'  :  '+magribStart_hash5);
+            salahNotification('hash5', 'Magrib');
 
             break;
         case ishaStart_hash5:
             bot.sendMessage(chatId_hash5, 'شروع عشاء'+'  :  '+ishaStart_hash5);
+            salahNotification('hash5', 'Isha');
 
             break;
     
@@ -616,22 +732,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash6:
             bot.sendMessage(chatId_hash6, 'شروع فجر'+'  :  '+fajrStart_hash6);
+            salahNotification('hash6', 'Fajr');
             
             break;
         case zuhrStart_hash6:
             bot.sendMessage(chatId_hash6, 'شروع ظهر'+'  :  '+zuhrStart_hash6);
+            salahNotification('hash6', 'Zuhr');
 
             break;
         case asrStart_hash6:
             bot.sendMessage(chatId_hash6, 'شروع عصر'+'  :  '+asrStart_hash6);
+            salahNotification('hash6', 'Asr');
 
             break;
         case magribStart_hash6:
             bot.sendMessage(chatId_hash6, 'شروع مغرب'+'  :  '+magribStart_hash6);
+            salahNotification('hash6', 'Magrib');
 
             break;
         case ishaStart_hash6:
             bot.sendMessage(chatId_hash6, 'شروع عشاء'+'  :  '+ishaStart_hash6);
+            salahNotification('hash6', 'Isha');
 
             break;
     
@@ -650,22 +771,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash7:
             bot.sendMessage(chatId_hash7, 'شروع فجر'+'  :  '+fajrStart_hash7);
+            salahNotification('hash7', 'Fajr');
             
             break;
         case zuhrStart_hash7:
             bot.sendMessage(chatId_hash7, 'شروع ظهر'+'  :  '+zuhrStart_hash7);
+            salahNotification('hash7', 'Zuhr');
 
             break;
         case asrStart_hash7:
             bot.sendMessage(chatId_hash7, 'شروع عصر'+'  :  '+asrStart_hash7);
+            salahNotification('hash7', 'Asr');
 
             break;
         case magribStart_hash7:
             bot.sendMessage(chatId_hash7, 'شروع مغرب'+'  :  '+magribStart_hash7);
+            salahNotification('hash7', 'Magrib');
 
             break;
         case ishaStart_hash7:
             bot.sendMessage(chatId_hash7, 'شروع عشاء'+'  :  '+ishaStart_hash7);
+            salahNotification('hash7', 'Isha');
 
             break;
     
@@ -684,22 +810,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash8:
             bot.sendMessage(chatId_hash8, 'شروع فجر'+'  :  '+fajrStart_hash8);
+            salahNotification('hash8', 'Fajr');
             
             break;
         case zuhrStart_hash8:
             bot.sendMessage(chatId_hash8, 'شروع ظهر'+'  :  '+zuhrStart_hash8);
+            salahNotification('hash8', 'Zuhr');
 
             break;
         case asrStart_hash8:
             bot.sendMessage(chatId_hash8, 'شروع عصر'+'  :  '+asrStart_hash8);
+            salahNotification('hash8', 'Asr');
 
             break;
         case magribStart_hash8:
             bot.sendMessage(chatId_hash8, 'شروع مغرب'+'  :  '+magribStart_hash8);
+            salahNotification('hash8', 'Magrib');
 
             break;
         case ishaStart_hash8:
             bot.sendMessage(chatId_hash8, 'شروع عشاء'+'  :  '+ishaStart_hash8);
+            salahNotification('hash8', 'Isha');
 
             break;
 
@@ -719,22 +850,27 @@ const sendTimeToDistricts = function(){
     switch (timeString) {
         case fajrStart_hash9:
             bot.sendMessage(chatId_hash9, 'شروع فجر'+'  :  '+fajrStart_hash9);
+            salahNotification('hash9', 'Fajr');
             
             break;
         case zuhrStart_hash9:
             bot.sendMessage(chatId_hash9, 'شروع ظهر'+'  :  '+zuhrStart_hash9);
+            salahNotification('hash9', 'Zuhr');
 
             break;
         case asrStart_hash9:
             bot.sendMessage(chatId_hash9, 'شروع عصر'+'  :  '+asrStart_hash9);
+            salahNotification('hash9', 'Asr');
 
             break;
         case magribStart_hash9:
             bot.sendMessage(chatId_hash9, 'شروع مغرب'+'  :  '+magribStart_hash9);
+            salahNotification('hash9', 'Magrib');
 
             break;
         case ishaStart_hash9:
             bot.sendMessage(chatId_hash9, 'شروع عشاء'+'  :  '+ishaStart_hash9);
+            salahNotification('hash9', 'Isha');
 
             break;
     

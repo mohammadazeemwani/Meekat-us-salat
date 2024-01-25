@@ -1,0 +1,84 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enable Notification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Amiri:wght@400;700&family=Harmattan&family=Poppins&family=Gulzar&family=IBM+Plex+Mono&family=Noto+Nastaliq+Urdu&family=Roboto+Mono&display=swap"
+    rel="stylesheet"
+  />
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./notification.css">
+  </head>
+  <body>
+    <div id="header">
+        <h1>Select Your Region</h1>
+    </div>
+    <div class="different-places">
+      <div>
+        <button class="places" data-custom-property="hash5">IslamAbad</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash6">Pulwama</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash5">Tral</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash6">Kulgam</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash7">Leh</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash6">Harmukh</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash8">Pahalgam</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash1">Uri</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash2">Baramulla</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash3">Bandipora</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash4">Teetwal</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash2">Tangmarg</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash2">Sopore</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash4">Karna</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash3">Punch</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash9">Srinagar</button>
+      </div>
+      <div>
+        <button class="places" data-custom-property="hash9">Budgam</button>
+      </div>
+    </div>
+
+    <script>
+      const placescontainer = document.querySelectorAll(".different-places div");
+
+      placescontainer.forEach((container) => {
+        container.addEventListener("click", () => {
+            container.classList.add('clicked')
+        })
+      })
+    </script>
+    <script type="module" src="./notification.js"></script>
+  </body>
+</html>

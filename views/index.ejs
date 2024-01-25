@@ -21,27 +21,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Harmattan&family=Poppins&family=Gulzar&family=IBM+Plex+Mono&family=Noto+Nastaliq+Urdu&family=Roboto+Mono&display=swap"
       rel="stylesheet"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Harmattan&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins&family=Gulzar&family=IBM+Plex+Mono&family=Noto+Nastaliq+Urdu&family=Roboto+Mono&display=swap"
-      rel="stylesheet"
-    />
+
     <link rel="stylesheet" href="style.css" />
     <link
       rel="icon"
-      href="meekat-logo-32px-min.png"
+      href="../public/meekat-logo-32px-min.png"
       sizes="32x32"
       type="image/png"
     />
     <link
       rel="icon"
-      href="meekat-logo-16px-min.png"
+      href="../public/meekat-logo-16px-min.png"
       sizes="16x16"
       type="image/png"
     />
@@ -56,6 +49,18 @@
   <body>
     <div class="container">
       <h1>ميقات الصلاة</h1>
+      <div id="notify_header">
+        <div class="notify_img_container1" id="notify_btn">
+          <img src="./notify.svg" alt="bell icon" />
+        </div>
+        <div class="notify_img_container1" id="disable_notification_btn">
+          <img src="./disable_notify.svg" alt="cross bell icon" />
+        </div>
+
+        <div class="notify_img_container2 hidden" id="install_btn">
+          <img src="./install.svg" alt="install icon" />
+        </div>
+      </div>
       <p class="place-name">
         برائے<%= place %><span>، باقی علاقوں کے لئے نیچے دیکھیں</span>
       </p>
@@ -220,5 +225,51 @@
         <a href="https://mohammadazeem.in">mohammadazeem.in</a>
       </div>
     </div>
+    <script src="./install.js"></script>
+    <script>
+ 
+      const notifyElements = document.querySelectorAll("#notify_header div");
+
+      notifyElements.forEach((element) => {
+        element.addEventListener("click", () => {
+            element.classList.add('clicked')
+        })
+      })
+
+
+
+const notificationButton = document.getElementById("notify_btn");
+const disableNotificationBtn = document.getElementById("disable_notification_btn");
+  
+  if (localStorage.getItem('notificationEnabled') === 'true') {
+    notificationButton.classList.add("hidden");
+    disableNotificationBtn.classList.remove("hidden");
+  } else {
+    notificationButton.classList.remove("hidden");
+    disableNotificationBtn.classList.add("hidden");
+  }
+
+  notificationButton.addEventListener("click", () => {
+    // fetch('/enableNotification', {
+    //   method: 'GET',
+    // })
+    window.location.href = '/enableNotification';
+  })
+    </script>
+   
+<script src="./removeNotification.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./firebase-messaging-sw.js")
+            .catch((error) => {
+              console.error("Service Worker registration failed:", error);
+            });
+        });
+      }
+    </script>
+    <script type="module" src="./foregroundNotification.js" ></script>
+    
   </body>
 </html>

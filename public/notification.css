@@ -1,0 +1,59 @@
+.different-places button{
+    text-align: start;
+    border: none;
+    font-size: 25px;
+    font-family: 'Harmattan';
+}
+
+.different-places div{
+    box-shadow: 0px 7px 3px 0px rgba(0, 0, 0, 0.25);
+    margin: 0px 0px 10px 0px;
+    transition: all 0.35s ease-in-out;
+    cursor: pointer;
+}
+.different-places div:hover{
+    transform: translateY(5px);
+    box-shadow: none;
+}
+
+.different-places div.clicked{
+    transform: translate(-5px);
+    animation: scaleAnimation 1.6s infinite;
+}
+
+@keyframes scaleAnimation {
+    /* Start at 0% (initial state) */
+    0% {
+      transform: scale(0.7);
+    }
+  
+    /* After 50% of the duration (3 seconds), scale to 1 */
+    50% {
+      transform: scale(1);
+    }
+  
+    /* At the end of the duration (6 seconds), scale back to 0.5 */
+    100% {
+      transform: scale(0.7);
+    }
+  }
+
+
+
+
+
+#header {
+    background-color: #FFF3DE;
+    border-radius: 0 0 12px 12px;
+    box-shadow: -6px 10px 5px 0px rgba(0, 0, 0, 0.25);
+    max-width: 510px;
+    margin: 0px auto 20px auto;
+    padding: 14px 0px 4px 0px;
+}
+
+h1{
+    font-family: 'Crimson Text';
+    text-align: start;
+    margin: 0px 0px 0px 11px;
+    font-size: 41px;
+}
