@@ -1,5 +1,9 @@
+
+
+
 const publicKey_vapid =
   "BMpHNUa_5Q7OykllPKLebjhbata_FxG3GmCLCE3kTINjHyoo_M5DSItwgWxOwOEWpnMZ5YTrh9ec_ru3E8CaQqU";
+
 
 // Import the functions you need from the SDKs you need
 
@@ -29,82 +33,103 @@ const firebaseConfig = {
 // Initialize Firebase_app
 
 const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+const messaging = getMessaging();
+// const app = firebase.initializeApp(firebaseConfig);
+// const messaging = firebase.messaging();
+
+
 
 // Disabling all click and touch events on the window
 function disableWindowInteraction() {
-  document.body.style.pointerEvents = "none";
+  document.body.style.pointerEvents = 'none';
 }
 
 // Enabling click and touch events on the window
 function enableWindowInteraction() {
-  document.body.style.pointerEvents = "auto";
+  document.body.style.pointerEvents = 'auto';
 }
 
 // set notificationEnabled to true only if it isn't there
-if (!Boolean(localStorage.getItem("notificationEnabled"))) {
-  localStorage.setItem("notificationEnabled", false);
+if (!Boolean(localStorage.getItem('notificationEnabled'))) {
+  localStorage.setItem('notificationEnabled', false);
 }
+
 
 // select array of all elements with class "places" and add event listner and do to them what we did above with notification button
 
 const notificationButtons = document.querySelectorAll(".places");
 
 notificationButtons.forEach((button) => {
-  button.addEventListener("click", async () => {
-    if (
-      "Notification" in window &&
-      localStorage.getItem("notificationEnabled") === "false"
-    ) {
-      const permission = await Notification.requestPermission();
-      if (permission === "granted") {
-        //disable touch on window
-        disableWindowInteraction();
+  button.addEventListener('click', () => {
+    if ("Notification" in window && localStorage.getItem('notificationEnabled') === 'false') {
+    
+      Notification.requestPermission().then(async (permission) => {
+        if (permission === 'granted'){
 
-        // now get the token and make the fetch request
+          //disable touch on window
+          disableWindowInteraction();
+        
 
-        const currentToken = await getToken(messaging, {
-          vapidKey: publicKey_vapid,
-        });
+          await getToken(messaging, { vapidKey: publicKey_vapid })
+          .then(async function (currentToken) {
+            if (currentToken) {
+              await fetch("/token_recieve", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  district: button.dataset.customProperty.toLowerCase(),
+                  token: currentToken,
+                  
+                })
+              }).then((response) => {
 
-        if (currentToken) {
-          const response = await fetch("/token_recieve", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              district: button.dataset.customProperty.toLowerCase(),
-              token: currentToken,
-            }),
-          });
+                if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+                
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
 
-          const data = await response.json();
+               
+              }).then((data) => {
+                // store in localStroage
+                console.log(data);    
+                localStorage.setItem("notificationEnabled", true);
+                localStorage.setItem("indexOfBatch", data.indexOfBatch);
+                localStorage.setItem("indexOfFcmInBatch", data.indexOfFcmInBatch);
+                localStorage.setItem("fcm_token", currentToken);
+                localStorage.setItem('districtHash', button.dataset.customProperty); 
+                
+                window.location.href = "/";
+              })
 
-          localStorage.setItem("notificationEnabled", true);
-          localStorage.setItem("indexOfBatch", data.indexOfBatch);
-          localStorage.setItem("indexOfFcmInBatch", data.indexOfFcmInBatch);
-          localStorage.setItem("fcm_token", currentToken);
-          localStorage.setItem("districtHash", button.dataset.customProperty);
 
-          window.location.href = "/";
+            }  else {
+              // Showing permission request UI
+              console.log(
+                "No registration token available. Request permission to generate one."
+              );
+            }
+          })
+          .catch((err) => {
+            console.log("An error occurred while retrieving token. ", err);
+          })
+
+
         } else {
-          // Showing permission request UI
-          console.log(
-            "No registration token available. Request permission to generate one."
-          );
+          // permission is not granted redirect to home
+          window.location.href = '/';
+
         }
-      } else {
-        // permission is not granted redirect to home
-        window.location.href = "/";
-      }
+      })
     } else {
       // notification is not supported or notification is already enabled
       window.location.href = "/";
     }
-  });
+  })
 });
+
+
+

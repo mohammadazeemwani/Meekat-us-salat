@@ -61,8 +61,11 @@ app.get('/enableNotification', (req, res) => {
 app.post('/token_recieve',async (req, res) => {
 
     console.log(req.body);
-    const result = await saveToken(req.body.district.toLowerCase(), req.body.token);
-    res.json(result);
+    await saveToken(req.body.district.toLowerCase(), req.body.token)
+     .then((result) => {
+         res.json(result);
+     })
+    
 });
 
 app.post('/disableNotification',async (req, res) => {
