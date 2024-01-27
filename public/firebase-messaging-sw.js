@@ -45,10 +45,11 @@ const firebaseConfig = {
   self.addEventListener('message', function(event) {
     
     if (event.data.type === 'showNotification') {
-      const { title, body, icon } = event.data.payload;
+      const { title, body, icon, badge } = event.data.payload;
       self.registration.showNotification(title, {
         body,
         icon,
+        badge
       });
     
     }
@@ -60,6 +61,7 @@ messaging.onBackgroundMessage(function(payload) {
   self.registration.showNotification(payload.data.title, {
     body: payload.data.body,
     icon: './meekat-logo-92px.png',
+    badge: './meekat-logo-92px.png',
   });
 
 

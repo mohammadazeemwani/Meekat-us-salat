@@ -64,6 +64,7 @@ onMessage(messaging, (payload) => {
               title: payload.data.title,
               body: payload.data.body,
               icon: './meekat-logo-92px.png',
+              badge: './meekat-logo-92px.png',
             },
           });
           
