@@ -1,11 +1,17 @@
 {
-	"folders": [
-		{
-			"path": ".."
-		},
-		{
-			"path": "../../push notification test"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "name": "clinic test 2",
+      "path": "../../clinic test 2"
+    },
+    {
+      "name": "shifaclinic",
+      "path": "../../shifaclinic"
+    },
+    {
+      "name": "clinicproject",
+      "path": "../../clinicproject"
+    }
+  ],
+  "settings": {}
 }
